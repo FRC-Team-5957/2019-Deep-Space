@@ -20,6 +20,7 @@ public class Hatch extends Subsystem {
 
   Solenoid hatchGrip, hatchExtend;
 
+
   public Hatch() {
     initSolenoid();
   }
@@ -36,18 +37,18 @@ public class Hatch extends Subsystem {
   }
 
   public void gripOpen() {
-    
+    hatchGrip.set(true);
   }
 
   public void gripClose() {
-
+    hatchGrip.set(false);
   }
 
   public void hatchOut() {
-
+    hatchExtend.set(true);
   }
 
   public void hatchIn() {
-
+    hatchExtend.set(false);
   }
 }

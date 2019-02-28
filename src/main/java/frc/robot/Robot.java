@@ -5,6 +5,7 @@ import frc.robot.controls.Controls;
 import frc.robot.controls.DriverStation;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Cargo;
+import frc.robot.subsystems.Hatch;
 import frc.robot.subsystems.ShiftingWestCoast;
 import frc.robot.subsystems.Arm.Mode;
 import frc.robot.subsystems.Arm.Position;
@@ -16,6 +17,7 @@ public class Robot extends TimedRobot {
   DriverStation ds;
   Arm arm;
   Cargo cargo;
+  Hatch hatch;
 
   @Override
   public void robotInit() {
@@ -23,6 +25,7 @@ public class Robot extends TimedRobot {
     ds = new DriverStation();
     arm = new Arm();
     cargo = new Cargo();
+    hatch = new Hatch();
   }
 
   @Override
@@ -110,6 +113,21 @@ public class Robot extends TimedRobot {
       cargo.shoot();
     } else {
       cargo.restPos();
+    }
+  }
+
+  public void hatchControl() {
+
+    if (ds.getGripButton()){
+      hatch.gripClose();
+    } else {
+      hatch.gripOpen();
+    }
+
+    if (ds.getExtendButton()) {
+      hatch.hatchOut();
+    } else if (ds.getRetractButton()) {
+      hatch.hatchIn();
     }
   }
 

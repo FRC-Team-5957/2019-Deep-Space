@@ -19,4 +19,7 @@ public class Controls {
 
     public static final int HATCH_GATHERING = 3; // Make this one button
 
+    public static final int HATCH_EXTEND = 0;
+    public static final int HATCH_RETRACT = 0;
+
 }

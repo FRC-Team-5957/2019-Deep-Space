@@ -57,6 +57,21 @@ public class DriverStation {
         return getAxis(Controls.ARM_CONTROL, operator);
     }
 
+    //Hatch
+
+    public boolean getGripButton() {
+        return getButton(Controls.HATCH_GATHERING, operator);
+    }
+
+    public boolean getExtendButton() {
+        return getButton(Controls.HATCH_EXTEND, operator);
+    }
+
+    public boolean getRetractButton() {
+        return getButton(Controls.HATCH_RETRACT, operator);
+    }
+    
+
     // Utils
     // ----------------------------------------------------------------------------------
     private boolean getButtonPressed(int button, Joystick j) {
@@ -78,4 +93,6 @@ public class DriverStation {
     private boolean getAxisPressed(int axis, Joystick j) {
         return j.getRawAxis(axis) != 0;
     }
+
+    
 }
