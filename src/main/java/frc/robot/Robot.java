@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.controls.Controls;
 import frc.robot.controls.DriverStation;
 import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Cargo;
 import frc.robot.subsystems.ShiftingWestCoast;
 import frc.robot.subsystems.Arm.Mode;
 import frc.robot.subsystems.Arm.Position;
@@ -14,12 +15,14 @@ public class Robot extends TimedRobot {
   ShiftingWestCoast drive;
   DriverStation ds;
   Arm arm;
+  Cargo cargo;
 
   @Override
   public void robotInit() {
     drive = new ShiftingWestCoast();
     ds = new DriverStation();
     arm = new Arm();
+    cargo = new Cargo();
   }
 
   @Override
@@ -45,9 +48,9 @@ public class Robot extends TimedRobot {
 
   public void teleopControl() {
     driveTrainControl();
-     cargoControl(Mode.MAGIC); // can change this so it can be changes mid-match
+    armControl(Mode.MANUAL); // can change this so it can be changes mid-match
     // TODO: add hatch control
-
+    cargoControl();
   }
 
   public void driveTrainControl() {
@@ -58,7 +61,7 @@ public class Robot extends TimedRobot {
     drive.shift(highGear);
   }
 
-  public void cargoControl(Mode m) {
+  public void armControl(Mode m) {
     if (m == Mode.MAGIC)
 
     { // Motion Magic
@@ -91,12 +94,25 @@ public class Robot extends TimedRobot {
         // just set intake to intakeSpeed
       }
     } else if (m == Mode.MANUAL) {
-      arm.manualOperate(ds.getArmControl() * 0.8);
+      arm.manualOperate(ds.getArmControl() * 0.2
+
+      );
       // implement something for manual control ONLY while tuning the PIDF values. DO
       // NOT
       // use manual control in a match unless something breaks. USE MOTON MAGIC
     }
   }
+
+  public void cargoControl() {
+    if (ds.getCargoGathering()) {
+      cargo.intake();
+    } else if (ds.shootCargo()) {
+      cargo.shoot();
+    } else {
+      cargo.restPos();
+    }
+  }
+
 
   // public void hatchControl() {
   // TODO add hatch class and control for it here

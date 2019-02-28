@@ -50,7 +50,7 @@ public class DriverStation {
     }
 
     public boolean shootCargo() {
-        return getButton(Controls.CARGO_SHOOT, driver); // Intentionally gave the shoot command to the driver
+        return getButton(Controls.CARGO_SHOOT, operator); // Intentionally gave the shoot command to the driver
     }
 
     public double getArmControl() {
