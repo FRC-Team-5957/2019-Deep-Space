@@ -36,7 +36,7 @@ public class Hatch extends Subsystem {
   }
 
   public void gripOpen() {
-
+    
   }
 
   public void gripClose() {
@@ -48,6 +48,6 @@ public class Hatch extends Subsystem {
   }
 
   public void hatchIn() {
-    
+
   }
 }

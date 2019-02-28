@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
@@ -20,18 +21,18 @@ import frc.robot.RobotMap;
  */
 public class Cargo extends Subsystem {
 
-  WPI_VictorSPX cargoLeft, cargoRight;
-  DifferentialDrive cargo;
+  WPI_VictorSPX cargoMaster, cargoSlave;
+  
 
   public Cargo() {
     
   }
 
   private void initMotors() {
-    cargoLeft = new WPI_VictorSPX(RobotMap.CARGO_LEFT);
-    cargoRight = new WPI_VictorSPX(RobotMap.CARGO_RIGHT);
+    cargoMaster = new WPI_VictorSPX(RobotMap.CARGO_LEFT);
+    cargoSlave= new WPI_VictorSPX(RobotMap.CARGO_RIGHT);
 
-    cargo = new DifferentialDrive(cargoLeft, cargoRight);
+    cargoSlave.follow(cargoMaster);
   }
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
@@ -43,14 +44,14 @@ public class Cargo extends Subsystem {
   }
 
   public void intake() {
-    cargo.arcadeDrive(Constants.CARGO_INTAKE_SPEED, 0);
+    cargoMaster.set(ControlMode.PercentOutput, Constants.CARGO_INTAKE_SPEED);
   }
 
   public void shoot() {
-    cargo.arcadeDrive(Constants.CARGO_SHOOT_SPEED, 0);
+    cargoMaster.set(ControlMode.PercentOutput, Constants.CARGO_SHOOT_SPEED);
   }
 
   public void restPos() {
-    cargo.arcadeDrive(0, 0);
+    cargoMaster.set(ControlMode.PercentOutput, 0);
   }
 }
