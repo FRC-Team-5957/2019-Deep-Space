@@ -118,15 +118,15 @@ public class Robot extends TimedRobot {
 
   public void hatchControl() {
 
-    if (ds.getGripButton()){
+    if (ds.getGripButton() == true){
       hatch.gripClose();
     } else {
       hatch.gripOpen();
     }
 
-    if (ds.getExtendButton()) {
+    if (ds.getExtendButton() == true) {
       hatch.hatchOut();
-    } else if (ds.getRetractButton()) {
+    } else if (ds.getRetractButton() == true) {
       hatch.hatchIn();
     }
   }

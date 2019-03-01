@@ -11,15 +11,15 @@ public class Controls {
 
     public static final int SENSITIVITY = 3;
 
-    public static final int CARGO_GATHERING = 1; // Make this the left trigger
+    public static final int CARGO_GATHERING = 5; // Make this the left trigger
     public static final int CARGO_ROCKET = 4;
     public static final int CARGO_SHIP = 2;
-    public static final int CARGO_SHOOT = 3;
-    public static final int ARM_CONTROL = 5;
+    public static final int CARGO_SHOOT = 6;
+    public static final int ARM_CONTROL = 1;
 
-    public static final int HATCH_GATHERING = 3; // Make this one button
+    public static final int HATCH_GATHERING = 1; // Make this one button
 
-    public static final int HATCH_EXTEND = 0;
-    public static final int HATCH_RETRACT = 0;
+    public static final int HATCH_EXTEND = 2;
+    public static final int HATCH_RETRACT = 3;
 
 }

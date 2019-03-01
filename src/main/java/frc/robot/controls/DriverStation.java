@@ -60,7 +60,7 @@ public class DriverStation {
     //Hatch
 
     public boolean getGripButton() {
-        return getButton(Controls.HATCH_GATHERING, operator);
+        return operator.getRawButton(Controls.HATCH_GATHERING);
     }
 
     public boolean getExtendButton() {

@@ -34,6 +34,9 @@ public class Hatch extends Subsystem {
   private void initSolenoid() {
     hatchGrip = new Solenoid(RobotMap.PCM_ID, RobotMap.HATCH_GRIPPER);
     hatchExtend = new Solenoid(RobotMap.PCM_ID, RobotMap.HATCH_EXTEND);
+
+    hatchGrip.set(true);
+    hatchExtend.set(false);
   }
 
   public void gripOpen() {

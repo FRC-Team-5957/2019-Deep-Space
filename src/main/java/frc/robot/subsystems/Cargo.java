@@ -9,11 +9,9 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
 
@@ -26,7 +24,7 @@ public class Cargo extends Subsystem {
   
 
   public Cargo() {
-    
+    initMotors();
   }
 
   private void initMotors() {
