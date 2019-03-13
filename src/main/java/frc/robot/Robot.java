@@ -1,14 +1,16 @@
 package frc.robot;
 
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.controls.Controls;
 import frc.robot.controls.DriverStation;
 import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Arm.Mode;
+import frc.robot.subsystems.Arm.Position;
 import frc.robot.subsystems.Cargo;
 import frc.robot.subsystems.Hatch;
 import frc.robot.subsystems.ShiftingWestCoast;
-import frc.robot.subsystems.Arm.Mode;
-import frc.robot.subsystems.Arm.Position;
 import frc.robot.subsystems.ShiftingWestCoast.DriveMode;
 
 public class Robot extends TimedRobot {
@@ -19,6 +21,7 @@ public class Robot extends TimedRobot {
   Cargo cargo;
   Hatch hatch;
 
+
   @Override
   public void robotInit() {
     drive = new ShiftingWestCoast();
@@ -26,6 +29,8 @@ public class Robot extends TimedRobot {
     arm = new Arm();
     cargo = new Cargo();
     hatch = new Hatch();
+    CameraServer.getInstance().startAutomaticCapture();
+    CameraServer.getInstance().startAutomaticCapture();
   }
 
   @Override
@@ -38,6 +43,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
+    teleopControl();
   }
 
   @Override
@@ -54,6 +60,7 @@ public class Robot extends TimedRobot {
     armControl(Mode.MANUAL); // can change this so it can be changes mid-match
     // TODO: add hatch control
     cargoControl();
+    hatchControl();
   }
 
   public void driveTrainControl() {
@@ -97,7 +104,7 @@ public class Robot extends TimedRobot {
         // just set intake to intakeSpeed
       }
     } else if (m == Mode.MANUAL) {
-      arm.manualOperate(ds.getArmControl() * 0.2
+      arm.manualOperate(ds.getArmControl() * 0.4
 
       );
       // implement something for manual control ONLY while tuning the PIDF values. DO
@@ -118,7 +125,7 @@ public class Robot extends TimedRobot {
 
   public void hatchControl() {
 
-    if (ds.getGripButton() == true){
+    if (ds.getGripButton() == true) {
       hatch.gripClose();
     } else {
       hatch.gripOpen();
@@ -130,7 +137,6 @@ public class Robot extends TimedRobot {
       hatch.hatchIn();
     }
   }
-
 
   // public void hatchControl() {
   // TODO add hatch class and control for it here

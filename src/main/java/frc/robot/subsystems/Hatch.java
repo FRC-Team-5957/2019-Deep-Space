@@ -7,7 +7,9 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
 
@@ -18,7 +20,7 @@ public class Hatch extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
-  Solenoid hatchGrip, hatchExtend;
+  DoubleSolenoid hatchGrip, hatchExtend;
 
 
   public Hatch() {
@@ -32,26 +34,26 @@ public class Hatch extends Subsystem {
   }
 
   private void initSolenoid() {
-    hatchGrip = new Solenoid(RobotMap.PCM_ID, RobotMap.HATCH_GRIPPER);
-    hatchExtend = new Solenoid(RobotMap.PCM_ID, RobotMap.HATCH_EXTEND);
+    hatchGrip = new DoubleSolenoid(RobotMap.PCM_ID, RobotMap.HATCH_GRIPPER_A, RobotMap.HATCH_GRIPPER_B);
+    hatchExtend = new DoubleSolenoid(RobotMap.PCM_ID, RobotMap.HATCH_EXTEND_A, RobotMap.HATCH_EXTEND_B);
 
-    hatchGrip.set(true);
-    hatchExtend.set(false);
+    hatchGrip.set(Value.kForward);
+    hatchExtend.set(Value.kForward);
   }
 
   public void gripOpen() {
-    hatchGrip.set(true);
+    hatchGrip.set(Value.kForward);
   }
 
   public void gripClose() {
-    hatchGrip.set(false);
+    hatchGrip.set(Value.kReverse);
   }
 
   public void hatchOut() {
-    hatchExtend.set(true);
+    hatchExtend.set(Value.kForward);
   }
 
   public void hatchIn() {
-    hatchExtend.set(false);
+    hatchExtend.set(Value.kReverse);
   }
 }

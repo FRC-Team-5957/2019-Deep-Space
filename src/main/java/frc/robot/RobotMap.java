@@ -18,7 +18,10 @@ public class RobotMap {
     public static final int PCM_ID = 50;
     public static final int DRIVE_SHIFTER_A = 2;
     public static final int DRIVE_SHIFTER_B = 3;
-    public static final int HATCH_GRIPPER = 0;
-    public static final int HATCH_EXTEND = 1;
+    public static final int HATCH_GRIPPER_A = 4;
+    public static final int HATCH_GRIPPER_B = 5;
+    public static final int HATCH_EXTEND_A = 6;
+    public static final int HATCH_EXTEND_B = 7;
+
 
 }

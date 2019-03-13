@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 
@@ -40,11 +41,11 @@ public class ShiftingWestCoast extends Subsystem {
     leftSlave.follow(leftMaster);
     rightSlave.follow(rightMaster);
 
-    leftMaster.configOpenloopRamp(Constants.RAMP_RATE);
-    rightMaster.configOpenloopRamp(Constants.RAMP_RATE);
+    leftMaster.setNeutralMode(NeutralMode.Brake);
+    rightMaster.setNeutralMode(NeutralMode.Brake);
 
     drive = new DifferentialDrive(leftMaster, rightMaster);
-    drive.setMaxOutput(Constants.DRIVE_MAX_OUTPUT);
+    drive.setMaxOutput(Constants.DRIVE_MAX_LOW);
   }
 
   private void resetMotors() {
