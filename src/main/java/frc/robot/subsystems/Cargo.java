@@ -54,6 +54,6 @@ public class Cargo extends Subsystem {
   }
 
   public void restPos() {
-    cargoMaster.set(ControlMode.PercentOutput, -.15);
+    cargoMaster.set(ControlMode.PercentOutput, Constants.CARGO_HOLDING_SPEED);
   }
 }

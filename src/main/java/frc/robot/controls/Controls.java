@@ -5,7 +5,8 @@ public class Controls {
     // TODO: set all of these
     public static final int DRIVE_SPEED_AXIS = 1;
     public static final int DRIVE_TURN_AXIS = 0;
-    public static final int DRIVE_HIGHGEAR = 1; // make this the right trigger
+    public static final int DRIVE_HIGHGEAR = 1;
+    public static final int DRIVE_SLOW = 2;
     public static final int GTA_ACCEL = 3; // Driver right trigger
     public static final int GTA_DECELL = 2; // Driver left trigger
 

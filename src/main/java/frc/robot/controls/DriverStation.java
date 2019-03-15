@@ -35,6 +35,9 @@ public class DriverStation {
         return driver.getRawButton(Controls.DRIVE_HIGHGEAR);
     }
 
+    public boolean getLowGear() {
+        return driver.getRawButton(Controls.DRIVE_SLOW);
+    }
     // Cargo
     // ----------------------------------------------------------------------------------
     public boolean getCargoGathering() {

@@ -20,7 +20,7 @@ public class Robot extends TimedRobot {
   Arm arm;
   Cargo cargo;
   Hatch hatch;
-
+  Thread m_visionThread;
 
   @Override
   public void robotInit() {
@@ -29,12 +29,13 @@ public class Robot extends TimedRobot {
     arm = new Arm();
     cargo = new Cargo();
     hatch = new Hatch();
-    CameraServer.getInstance().startAutomaticCapture();
-    CameraServer.getInstance().startAutomaticCapture();
+    CameraServer.getInstance().startAutomaticCapture("Hatch",0);
+    CameraServer.getInstance().startAutomaticCapture("Cargo", 1);
   }
 
   @Override
   public void robotPeriodic() {
+
   }
 
   @Override
@@ -44,11 +45,13 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     teleopControl();
+    cameraInit();
   }
 
   @Override
   public void teleopPeriodic() {
     teleopControl();
+    cameraInit();
   }
 
   @Override
@@ -61,10 +64,11 @@ public class Robot extends TimedRobot {
     // TODO: add hatch control
     cargoControl();
     hatchControl();
+    cameraInit();
   }
 
   public void driveTrainControl() {
-    double speedInput = ds.getGTASpeed();
+    double speedInput = ds.getLowGear() ? ds.getGTASpeed() * Constants.DRIVE_SPEED_LOW : ds.getGTASpeed();
     double turnInput = ds.getTurn();
     boolean highGear = ds.getHighGear();
     drive.drive(DriveMode.kCurve, speedInput, turnInput, Controls.SENSITIVITY);
@@ -136,6 +140,22 @@ public class Robot extends TimedRobot {
     } else if (ds.getRetractButton() == true) {
       hatch.hatchIn();
     }
+  }
+
+  public void cameraInit() {
+    m_visionThread = new Thread(() -> {
+      UsbCamera hatchcamera = CameraServer.getInstance().startAutomaticCapture("Hatch", 0);
+      UsbCamera cargocamera = CameraServer.getInstance().startAutomaticCapture("Cargo", 1);
+
+      hatchcamera.setResolution(320, 240);
+      cargocamera.setResolution(320, 240);
+
+      hatchcamera.setFPS(30);
+      cargocamera.setFPS(30);
+
+    });
+    m_visionThread.setDaemon(true);
+    m_visionThread.start();
   }
 
   // public void hatchControl() {
