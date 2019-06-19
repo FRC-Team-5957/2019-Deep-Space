@@ -36,6 +36,9 @@ public class ShiftingWestCoast extends Subsystem {
     rightMaster = new WPI_VictorSPX(RobotMap.DRIVE_RIGHT_MASTER);
     rightSlave = new WPI_VictorSPX(RobotMap.DRIVE_RIGHT_SLAVE);
 
+    leftEnc = new Encoder(0, 1);
+    rightEnc = new Encoder(2, 3);
+
     resetMotors();
 
     leftSlave.follow(leftMaster);
@@ -92,5 +95,13 @@ public class ShiftingWestCoast extends Subsystem {
   // useless
   @Override
   public void initDefaultCommand() {
+  }
+
+  public double getLeftEncoder() {
+    return leftEnc.getDistance();
+  }
+
+  public double getRightEncoder() {
+    return rightEnc.getDistance();
   }
 }

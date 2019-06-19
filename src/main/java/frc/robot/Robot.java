@@ -35,7 +35,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-
+    System.out.println("left:");
+    drive.getLeftEncoder();
+    System.out.println("right:");
+    drive.getRightEncoder();
   }
 
   @Override
