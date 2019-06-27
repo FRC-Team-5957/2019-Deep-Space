@@ -54,7 +54,7 @@ public class Arm extends Subsystem {
   public void manualOperate(double speed) {
     armMaster.set(ControlMode.PercentOutput, speed);
     // armMaster.getSelectedSensorPosition(pidIdx);
-    System.out.println(armMaster.getSelectedSensorVelocity());
+    // System.out.println(armMaster.getSelectedSensorVelocity());
   }
 
   public void operate(Position p) {

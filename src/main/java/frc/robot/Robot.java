@@ -1,8 +1,16 @@
 package frc.robot;
 
+import easypath.EasyPath;
+import easypath.EasyPathConfig;
+import easypath.FollowPath;
+import easypath.Path;
+import easypath.PathUtil;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.Scheduler;
 import frc.robot.controls.Controls;
 import frc.robot.controls.DriverStation;
 import frc.robot.subsystems.Arm;
@@ -21,6 +29,8 @@ public class Robot extends TimedRobot {
   Cargo cargo;
   Hatch hatch;
   Thread m_visionThread;
+  Command test;
+  Timer t;
 
   @Override
   public void robotInit() {
@@ -29,32 +39,67 @@ public class Robot extends TimedRobot {
     arm = new Arm();
     cargo = new Cargo();
     hatch = new Hatch();
-    CameraServer.getInstance().startAutomaticCapture("Hatch",0);
-    CameraServer.getInstance().startAutomaticCapture("Cargo", 1);
+    t = new Timer();
+    // CameraServer.getInstance().startAutomaticCapture("Hatch",0);
+    // CameraServer.getInstance().startAutomaticCapture("Cargo", 1);
+
+    EasyPathConfig config = new EasyPathConfig(drive, // the subsystem itself
+        drive::motorControlEP, // function to set left/right speeds
+        // function to give EasyPath the length driven
+        () -> PathUtil.defaultLengthDrivenEstimator(drive::leftEncInches, drive::rightEncInches), drive::getAngle, // function
+        drive::resetEnc, // function to reset your encoders to 0
+        0.6// kP value for P loop
+    );
+
+    EasyPath.configure(config);
   }
 
   @Override
   public void robotPeriodic() {
     System.out.println("left:");
-    drive.getLeftEncoder();
+    System.out.println(drive.leftEncInches());
     System.out.println("right:");
-    drive.getRightEncoder();
+    System.out.println(drive.rightEncInches());
+    System.out.println("gyro:");
+    System.out.println(drive.getAngle());
+    // Timer.delay(0.1);
   }
 
   @Override
   public void autonomousInit() {
+    test = new FollowPath(new Path(t ->
+    /*
+     * {"start":{"x":64,"y":215},"mid1":{"x":174,"y":223},"mid2":{"x":176,"y":171},
+     * "end":{"x":213,"y":176}}
+     */
+    (351 * Math.pow(t, 2) + -360 * t + 24) / (429 * Math.pow(t, 2) + -648 * t + 330), 158.05), x -> {
+      return 0.6;
+      // if (x < 0.15) return 0.6;
+      // else if (x < 0.75) return 0.8;
+      // else return 0.25;
+    });
+
+    test.start();
+    // t.reset();
+    // t.start();
+    // while (t.get() < 2) {
+    // drive.motorControlEP(0.6, 0.6);
+    // }
+    // t.stop();
+    // drive.motorControlEP(0, 0);
   }
 
   @Override
   public void autonomousPeriodic() {
-    teleopControl();
-    cameraInit();
+    // teleopControl();
+    // drive.motorControlEP(0.5, 0.5);
+    // Timer.delay(5);
+    Scheduler.getInstance().run();
   }
 
   @Override
   public void teleopPeriodic() {
     teleopControl();
-    cameraInit();
   }
 
   @Override
@@ -63,11 +108,9 @@ public class Robot extends TimedRobot {
 
   public void teleopControl() {
     driveTrainControl();
-    armControl(Mode.MANUAL); // can change this so it can be changes mid-match
-    // TODO: add hatch control
+    armControl(Mode.MANUAL);
     cargoControl();
     hatchControl();
-    cameraInit();
   }
 
   public void driveTrainControl() {

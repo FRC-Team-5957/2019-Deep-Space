@@ -6,7 +6,9 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.Constants;
@@ -19,7 +21,9 @@ public class ShiftingWestCoast extends Subsystem {
   DifferentialDrive drive;
   DoubleSolenoid shifter;
   Encoder leftEnc, rightEnc;
-  AHRS navx;
+  public AHRS navx;
+
+  double distpert = 2500 / 36;
 
   /*
    * High Gear: TODO: find this Low Gear: TODO: find this
@@ -28,6 +32,8 @@ public class ShiftingWestCoast extends Subsystem {
   public ShiftingWestCoast() {
     initDrive();
     initShift();
+    navx = new AHRS(SPI.Port.kMXP);
+    navx.reset();
   }
 
   private void initDrive() {
@@ -38,6 +44,9 @@ public class ShiftingWestCoast extends Subsystem {
 
     leftEnc = new Encoder(0, 1);
     rightEnc = new Encoder(2, 3);
+
+    // leftEnc.setDistancePerPulse(distpert);
+    // rightEnc.setDistancePerPulse(distpert);
 
     resetMotors();
 
@@ -92,16 +101,28 @@ public class ShiftingWestCoast extends Subsystem {
     kArcade, kCurve;
   }
 
-  // useless
   @Override
   public void initDefaultCommand() {
   }
 
-  public double getLeftEncoder() {
-    return leftEnc.getDistance();
+  public void motorControlEP(double left, double right) {
+    drive.tankDrive(left, right);
   }
 
-  public double getRightEncoder() {
-    return rightEnc.getDistance();
+  public double getAngle() {
+    return navx.getYaw();
+  }
+
+  public void resetEnc() {
+    leftEnc.reset();
+    rightEnc.reset();
+  }
+
+  public double leftEncInches() {
+    return leftEnc.getDistance() / distpert;
+  }
+
+  public double rightEncInches() {
+    return rightEnc.getDistance() / distpert;
   }
 }
