@@ -23,7 +23,8 @@ public class ShiftingWestCoast extends Subsystem {
   Encoder leftEnc, rightEnc;
   public AHRS navx;
 
-  double distpert = 2500 / 36;
+  double distpertl = 36 / 733;
+  double distpertr = 36 / 410;
 
   /*
    * High Gear: TODO: find this Low Gear: TODO: find this
@@ -42,11 +43,11 @@ public class ShiftingWestCoast extends Subsystem {
     rightMaster = new WPI_VictorSPX(RobotMap.DRIVE_RIGHT_MASTER);
     rightSlave = new WPI_VictorSPX(RobotMap.DRIVE_RIGHT_SLAVE);
 
-    leftEnc = new Encoder(0, 1);
-    rightEnc = new Encoder(2, 3);
+    leftEnc = new Encoder(2, 3);
+    rightEnc = new Encoder(4, 5);
 
-    // leftEnc.setDistancePerPulse(distpert);
-    // rightEnc.setDistancePerPulse(distpert);
+    // leftEnc.setDistancePerPulse(distpertl);
+    // rightEnc.setDistancePerPulse(distpertr);
 
     resetMotors();
 
@@ -118,11 +119,19 @@ public class ShiftingWestCoast extends Subsystem {
     rightEnc.reset();
   }
 
+  public double getLeftEnc() {
+    return (double) leftEnc.get();
+  }
+
+  public double getRightEnc() {
+    return (double) rightEnc.get();
+  }
+
   public double leftEncInches() {
-    return leftEnc.getDistance() / distpert;
+    return (getLeftEnc() * (36 / 733));
   }
 
   public double rightEncInches() {
-    return rightEnc.getDistance() / distpert;
+    return (getRightEnc() * (36 / 733));
   }
 }

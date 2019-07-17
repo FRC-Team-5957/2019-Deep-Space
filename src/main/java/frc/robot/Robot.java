@@ -48,7 +48,7 @@ public class Robot extends TimedRobot {
         // function to give EasyPath the length driven
         () -> PathUtil.defaultLengthDrivenEstimator(drive::leftEncInches, drive::rightEncInches), drive::getAngle, // function
         drive::resetEnc, // function to reset your encoders to 0
-        0.6// kP value for P loop
+        0.07// kP value for P loop
     );
 
     EasyPath.configure(config);
