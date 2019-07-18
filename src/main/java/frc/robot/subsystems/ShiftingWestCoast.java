@@ -26,6 +26,7 @@ public class ShiftingWestCoast extends Subsystem {
   double distpertl = 36 / 733;
   double distpertr = 36 / 410;
 
+
   /*
    * High Gear: TODO: find this Low Gear: TODO: find this
    */
@@ -43,11 +44,11 @@ public class ShiftingWestCoast extends Subsystem {
     rightMaster = new WPI_VictorSPX(RobotMap.DRIVE_RIGHT_MASTER);
     rightSlave = new WPI_VictorSPX(RobotMap.DRIVE_RIGHT_SLAVE);
 
-    leftEnc = new Encoder(2, 3);
+    leftEnc = new Encoder(2, 3, true);
     rightEnc = new Encoder(4, 5);
 
-    // leftEnc.setDistancePerPulse(distpertl);
-    // rightEnc.setDistancePerPulse(distpertr);
+    leftEnc.setDistancePerPulse(5 * (Math.PI) / 1116);
+    rightEnc.setDistancePerPulse(5 * (Math.PI) /1116);
 
     resetMotors();
 
@@ -119,19 +120,31 @@ public class ShiftingWestCoast extends Subsystem {
     rightEnc.reset();
   }
 
-  public double getLeftEnc() {
-    return (double) leftEnc.get();
-  }
-
-  public double getRightEnc() {
-    return (double) rightEnc.get();
+  public void resetEncGyro() {
+    leftEnc.reset();
+    rightEnc.reset();
+    navx.reset();
   }
 
   public double leftEncInches() {
-    return (getLeftEnc() * (36 / 733));
+    return (double) leftEnc.getDistance();
   }
 
   public double rightEncInches() {
-    return (getRightEnc() * (36 / 733));
+    return (double) rightEnc.getDistance();
+  }
+
+  // public double leftEncInches() {
+  //   return getLeftEnc();
+  // }
+
+  // public double rightEncInches() {
+  //   return getRightEnc();
+  // }
+
+  public void setCoast() {
+    leftMaster.setNeutralMode(NeutralMode.Coast);
+    rightMaster.setNeutralMode(NeutralMode.Coast);
+
   }
 }

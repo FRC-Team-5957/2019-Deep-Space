@@ -47,8 +47,8 @@ public class Robot extends TimedRobot {
         drive::motorControlEP, // function to set left/right speeds
         // function to give EasyPath the length driven
         () -> PathUtil.defaultLengthDrivenEstimator(drive::leftEncInches, drive::rightEncInches), drive::getAngle, // function
-        drive::resetEnc, // function to reset your encoders to 0
-        0.07// kP value for P loop
+        drive::resetEncGyro, // function to reset your encoders to 0
+        0.09// kP value for P loop
     );
 
     EasyPath.configure(config);
@@ -69,15 +69,17 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     test = new FollowPath(new Path(t ->
     /*
-     * {"start":{"x":64,"y":215},"mid1":{"x":174,"y":223},"mid2":{"x":176,"y":171},
-     * "end":{"x":213,"y":176}}
+     * {"start":{"x":4,"y":38},"mid1":{"x":117,"y":39},"mid2":{"x":281,"y":27},"end"
+     * :{"x":256,"y":138}}
      */
-    (351 * Math.pow(t, 2) + -360 * t + 24) / (429 * Math.pow(t, 2) + -648 * t + 330), 158.05), x -> {
+    (408 * Math.pow(t, 2) + -78 * t + 3) / (-720 * Math.pow(t, 2) + 306 * t + 339), 313.545), x -> {
       return 0.6;
       // if (x < 0.15) return 0.6;
       // else if (x < 0.75) return 0.8;
       // else return 0.25;
     });
+
+    drive.shift(false);
 
     test.start();
     // t.reset();
@@ -100,6 +102,11 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     teleopControl();
+  }
+
+  @Override
+  public void disabledInit() {
+    drive.setCoast();
   }
 
   @Override
