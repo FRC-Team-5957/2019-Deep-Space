@@ -1,5 +1,7 @@
 package frc.robot;
 
+import com.kauailabs.navx.frc.AHRS;
+
 import easypath.EasyPath;
 import easypath.EasyPathConfig;
 import easypath.FollowPath;
@@ -20,6 +22,7 @@ import frc.robot.subsystems.Cargo;
 import frc.robot.subsystems.Hatch;
 import frc.robot.subsystems.ShiftingWestCoast;
 import frc.robot.subsystems.ShiftingWestCoast.DriveMode;
+import frc.robot.pathstuff.Paths;
 
 public class Robot extends TimedRobot {
 
@@ -31,6 +34,7 @@ public class Robot extends TimedRobot {
   Thread m_visionThread;
   Command test;
   Timer t;
+  double heading;
 
   @Override
   public void robotInit() {
@@ -56,23 +60,18 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-    System.out.println("left:");
-    System.out.println(drive.leftEncInches());
-    System.out.println("right:");
-    System.out.println(drive.rightEncInches());
-    System.out.println("gyro:");
-    System.out.println(drive.getAngle());
+    // System.out.println("left:");
+    // System.out.println(drive.leftEncInches());
+    // System.out.println("right:");
+    // System.out.println(drive.rightEncInches());
+    // System.out.println("gyro:");
+    // System.out.println(drive.getAngle());
     // Timer.delay(0.1);
   }
 
   @Override
   public void autonomousInit() {
-    test = new FollowPath(new Path(t ->
-    /*
-     * {"start":{"x":4,"y":38},"mid1":{"x":117,"y":39},"mid2":{"x":281,"y":27},"end"
-     * :{"x":256,"y":138}}
-     */
-    (408 * Math.pow(t, 2) + -78 * t + 3) / (-720 * Math.pow(t, 2) + 306 * t + 339), 313.545), x -> {
+    test = new FollowPath(Paths.PATH1, x -> {
       return 0.6;
       // if (x < 0.15) return 0.6;
       // else if (x < 0.75) return 0.8;
@@ -114,7 +113,7 @@ public class Robot extends TimedRobot {
   }
 
   public void teleopControl() {
-    driveTrainControl();
+    headingAdjust();
     armControl(Mode.MANUAL);
     cargoControl();
     hatchControl();
@@ -126,6 +125,25 @@ public class Robot extends TimedRobot {
     boolean highGear = ds.getHighGear();
     drive.drive(DriveMode.kCurve, speedInput, turnInput, Controls.SENSITIVITY);
     drive.shift(highGear);
+  }
+
+  public void headingAdjust() {
+    double speedInput = ds.getLowGear() ? ds.getGTASpeed() * Constants.DRIVE_SPEED_LOW : ds.getGTASpeed();
+    double turnInput = ds.getTurn();
+    boolean highGear = ds.getHighGear();
+    drive.shift(highGear);
+
+    final double p = 0.035;
+    if (ds.getHeadingButton() == true) {
+      heading = drive.getAngle();
+    }
+
+    if (ds.getHeadingHeld() == true) {
+      drive.drive(DriveMode.kCurve, speedInput, (p * -(heading - drive.getAngle())), Controls.SENSITIVITY);
+    } else {
+      drive.drive(DriveMode.kCurve, speedInput, turnInput, Controls.SENSITIVITY);
+    }
+
   }
 
   public void armControl(Mode m) {
@@ -210,6 +228,15 @@ public class Robot extends TimedRobot {
     m_visionThread.setDaemon(true);
     m_visionThread.start();
   }
+
+  // public String pathGet() {
+  // if () {
+
+  // } else if () {
+
+  // }
+  // return "nothing";
+  // }
 
   // public void hatchControl() {
   // TODO add hatch class and control for it here

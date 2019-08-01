@@ -22,7 +22,7 @@ public class Constants {
 
     public static final double CARGO_INTAKE_SPEED = -0.8;
     public static final double CARGO_HOLDING_SPEED = -0.07;
-    public static final double CARGO_SHOOT_SPEED = 0.4; // Dont make this 100%, make it just fast enough to go in
+    public static final double CARGO_SHOOT_SPEED = 0.9; // Dont make this 100%, make it just fast enough to go in
 
     // TODO: SET THESE PLEASE
     public static final int ARM_STOWED = 0;

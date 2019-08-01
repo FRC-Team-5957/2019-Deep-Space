@@ -7,8 +7,8 @@ public class DriverStation {
 
 
 
-    Joystick driver;
-    Joystick operator;
+    public Joystick driver;
+    public Joystick operator;
 
     public DriverStation() {
         driver = new Joystick(RobotMap.DRIVER_USB);
@@ -37,6 +37,14 @@ public class DriverStation {
 
     public boolean getLowGear() {
         return driver.getRawButton(Controls.DRIVE_SLOW);
+    }
+
+    public boolean getHeadingButton() {
+        return driver.getRawButtonPressed(Controls.HEADING_BUTTON);
+    }
+
+    public boolean getHeadingHeld() {
+        return driver.getRawButton(Controls.HEADING_BUTTON);
     }
     // Cargo
     // ----------------------------------------------------------------------------------
