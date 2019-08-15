@@ -23,8 +23,14 @@ import frc.robot.subsystems.Hatch;
 import frc.robot.subsystems.ShiftingWestCoast;
 import frc.robot.subsystems.ShiftingWestCoast.DriveMode;
 import frc.robot.pathstuff.Paths;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class Robot extends TimedRobot {
+
+ 
 
   ShiftingWestCoast drive;
   DriverStation ds;
@@ -67,6 +73,21 @@ public class Robot extends TimedRobot {
     // System.out.println("gyro:");
     // System.out.println(drive.getAngle());
     // Timer.delay(0.1);
+
+    // System.out.println(tx);
+
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    NetworkTableEntry tx = table.getEntry("tx");
+    NetworkTableEntry ty = table.getEntry("ty");
+    NetworkTableEntry ta = table.getEntry("ta");
+  
+    double x = tx.getDouble(0.0);
+    double y = ty.getDouble(0.0);
+    double area = ta.getDouble(0.0);
+    
+    SmartDashboard.putNumber("LimelightX", x);
+    SmartDashboard.putNumber("LimelightY", y);
+    SmartDashboard.putNumber("LimelightArea", area);
   }
 
   @Override
