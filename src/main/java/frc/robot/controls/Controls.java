@@ -10,6 +10,7 @@ public class Controls {
     public static final int GTA_ACCEL = 3; // Driver right trigger
     public static final int GTA_DECELL = 2; // Driver left trigger
     public static final int HEADING_BUTTON = 3;
+    public static final int LIMELIGHT_BUTTON = 4;
 
     public static final int SENSITIVITY = 3;
 

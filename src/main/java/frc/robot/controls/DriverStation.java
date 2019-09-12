@@ -43,8 +43,16 @@ public class DriverStation {
         return driver.getRawButtonPressed(Controls.HEADING_BUTTON);
     }
 
+    public boolean getLimelightButton() {
+        return driver.getRawButtonPressed(Controls.LIMELIGHT_BUTTON);
+    }
+
     public boolean getHeadingHeld() {
         return driver.getRawButton(Controls.HEADING_BUTTON);
+    }
+
+    public boolean getLimelightHeld() {
+        return driver.getRawButton(Controls.LIMELIGHT_BUTTON);
     }
     // Cargo
     // ----------------------------------------------------------------------------------

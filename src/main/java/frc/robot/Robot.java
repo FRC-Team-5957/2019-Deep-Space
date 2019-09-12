@@ -41,6 +41,11 @@ public class Robot extends TimedRobot {
   Command test;
   Timer t;
   double heading;
+  double offset;
+
+  private boolean m_LimelightHasValidTarget = false;
+  private double m_LimelightDriveCommand = 0.0;
+  private double m_LimelightSteerCommand = 0.0;
 
   @Override
   public void robotInit() {
@@ -66,28 +71,20 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-    // System.out.println("left:");
-    // System.out.println(drive.leftEncInches());
-    // System.out.println("right:");
-    // System.out.println(drive.rightEncInches());
-    // System.out.println("gyro:");
-    // System.out.println(drive.getAngle());
-    // Timer.delay(0.1);
-
     // System.out.println(tx);
 
-    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-    NetworkTableEntry tx = table.getEntry("tx");
-    NetworkTableEntry ty = table.getEntry("ty");
-    NetworkTableEntry ta = table.getEntry("ta");
+    // NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    // NetworkTableEntry tx = table.getEntry("tx");
+    // NetworkTableEntry ty = table.getEntry("ty");
+    // NetworkTableEntry ta = table.getEntry("ta");
   
-    double x = tx.getDouble(0.0);
-    double y = ty.getDouble(0.0);
-    double area = ta.getDouble(0.0);
+    // double x = tx.getDouble(0.0);
+    // double y = ty.getDouble(0.0);
+    // double area = ta.getDouble(0.0);
     
-    SmartDashboard.putNumber("LimelightX", x);
-    SmartDashboard.putNumber("LimelightY", y);
-    SmartDashboard.putNumber("LimelightArea", area);
+    // SmartDashboard.putNumber("LimelightX", x);
+    // SmartDashboard.putNumber("LimelightY", y);
+    // SmartDashboard.putNumber("LimelightArea", area);
   }
 
   @Override
@@ -134,7 +131,7 @@ public class Robot extends TimedRobot {
   }
 
   public void teleopControl() {
-    headingAdjust();
+    adjust();
     armControl(Mode.MANUAL);
     cargoControl();
     hatchControl();
@@ -148,7 +145,46 @@ public class Robot extends TimedRobot {
     drive.shift(highGear);
   }
 
-  public void headingAdjust() {
+  public void adjust() {
+
+    final double STEER_K = 0.04;                    // how hard to turn toward the target
+    final double DRIVE_K = 0.26;                    // how hard to drive fwd toward the target
+    final double DESIRED_TARGET_AREA = 13.0;        // Area of the target when the robot reaches the wall
+    final double MAX_DRIVE = 0.7;                   // Simple speed limit so we don't drive too fast
+
+    double tv = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
+    double tx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
+    double ty = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
+    double ta = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0);
+
+    // if (tv < 1.0)
+    // {
+    //   m_LimelightHasValidTarget = false;
+    //   m_LimelightDriveCommand = 0.0;
+    //   m_LimelightSteerCommand = 0.0;
+    //   return;
+    // }
+
+    //  m_LimelightHasValidTarget = true;
+
+    // Start with proportional steering
+    double steer_cmd = tx * STEER_K;
+    m_LimelightSteerCommand = steer_cmd;
+   
+    // NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    // NetworkTableEntry tx = table.getEntry("tx");
+    // NetworkTableEntry ty = table.getEntry("ty");
+    // NetworkTableEntry ta = table.getEntry("ta");
+    
+    // double x = tx.getDouble(0.0);
+    // double y = ty.getDouble(0.0);
+    // double area = ta.getDouble(0.0);
+      
+    SmartDashboard.putNumber("LimelightX", tx);
+    SmartDashboard.putNumber("LimelightY", ty);
+    SmartDashboard.putNumber("LimelightArea", ta);
+    
+
     double speedInput = ds.getLowGear() ? ds.getGTASpeed() * Constants.DRIVE_SPEED_LOW : ds.getGTASpeed();
     double turnInput = ds.getTurn();
     boolean highGear = ds.getHighGear();
@@ -159,9 +195,15 @@ public class Robot extends TimedRobot {
       heading = drive.getAngle();
     }
 
+    // if (ds.getLimelightButton() == true) {
+    //   offset = tx;
+    // }
+
     if (ds.getHeadingHeld() == true) {
       drive.drive(DriveMode.kCurve, speedInput, (p * -(heading - drive.getAngle())), Controls.SENSITIVITY);
-    } else {
+    } else if (ds.getLimelightHeld() == true) {
+      drive.drive(DriveMode.kCurve, speedInput, -m_LimelightSteerCommand, Controls.SENSITIVITY);
+    }else {
       drive.drive(DriveMode.kCurve, speedInput, turnInput, Controls.SENSITIVITY);
     }
 
@@ -250,18 +292,6 @@ public class Robot extends TimedRobot {
     m_visionThread.start();
   }
 
-  // public String pathGet() {
-  // if () {
+  
 
-  // } else if () {
-
-  // }
-  // return "nothing";
-  // }
-
-  // public void hatchControl() {
-  // TODO add hatch class and control for it here
-  // Recommend:
-  // hold button = Hatch extend out, claw close
-  // release button = hatch retract, claw open
 }
